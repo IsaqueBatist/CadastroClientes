@@ -25,48 +25,54 @@
               <div class="row mt-3">
                 <div class="col-sm-6">
                   <label for="iname" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="iname">
+                  <input type="text" class="form-control" id="iname" required>
                 </div>
                 <div class="col-sm-6">
                   <label for="ilastname" class="form-label">Sobrenome</label>
-                  <input type="text" class="form-control" id="ilastname">
+                  <input type="text" class="form-control" id="ilastname" required>
                 </div>
               </div>
 
-              <div class="row mt-3">
+              <div class="row mt-3 d-flex align-items-end">
                 <div class="col-sm-3">
                   <label for="cepinput" class="form-label">Pesquise pelo CEP</label>
-                  <input type="text" class="form-control" id="cepinput">
+                  <input type="text" class="form-control" id="cepinput" required>
                 </div>
-              </div>
-              <fieldset disabled>
+                <div class="col-sm-3 text-danger" id="messageError">
+                    CEP não encontrado
+                </div>
+              </div>          
                 <div class="row mt-3">
                   <div class="col-sm-10">
                     <label for="adress" class="form-label">Endereço</label>
-                    <input type="text" id="adress" class="form-control">
+                    <input type="text" id="adress" class="form-control" disabled>
                   </div>
                   <div class="col-sm-2">
                     <label for="housenumber" class="form-label">Número</label>
-                    <input type="text" id="housenumber" class="form-control">
+                    <input type="text" id="housenumber" class="form-control" disabled>
                   </div>
                 </div>
                 <div class="row mt-3">
                   <div class="col-sm-6">
                     <label for="neighborhood" class="form-label">Bairro</label>
-                    <input type="text" id="neighborhood" class="form-control">
+                    <input type="text" id="neighborhood" class="form-control" disabled>
                   </div>
                   <div class="col-sm-6">
                     <label for="city" class="form-label">Cidade</label>
-                    <input type="text" id="city" class="form-control">
+                    <input type="text" id="city" class="form-control" disabled>
                   </div>
                 </div>
                 <div class="row mt-3">
                   <div class="col-sm-2">
                     <label for="state" class="form-label">Estado</label>
-                    <input type="text" id="state" class="form-control">
+                    <input type="text" id="state" class="form-control" disabled>
                   </div>
                 </div>
-              </fieldset>
+              <div class="row justify-content-center mt-3 mb-3">
+                <div class="col-sm-1">
+                  <button class="btn btn-primary" type="submit" >Salvar</button>
+                </div>
+              </div>
             </form>
           </div>
         </div>
