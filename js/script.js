@@ -63,10 +63,10 @@ function loadTable(customer) {
         <tr>
           <th scope="row">${customer.id}</th>
           <td>${customer.name}</td>
-          <td>${customer.adress}</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td  class="d-none d-md-table-cell">${customer.adress}</td>
+          <td  class="d-none d-md-table-cell"></td>
+          <td  class="d-none d-md-table-cell"></td>
+          <td  class="d-none d-md-table-cell"></td>
           <td>${customer.cep}</td>
           <td>${customer.neighborhood}</td>
           <td>${customer.city}</td>
