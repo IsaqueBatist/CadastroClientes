@@ -1,3 +1,4 @@
+$("#cepinput").mask("00000-000")
 let customers = [
   {
     id: 1,
@@ -10,7 +11,6 @@ let customers = [
   }
 ]
 
-$("#cepinput").mask("00000-000")
 function checkInput() {
   const cepinput = document.getElementById("cepinput").value
   const errordiv = document.getElementById('messageError')
