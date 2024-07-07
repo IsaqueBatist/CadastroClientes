@@ -24,8 +24,7 @@ function checkInput() {
 }
 
 async function getData(cep) {
-  const errordiv = document.getElementById("messageError").value
-  try{
+  const errordiv = document.getElementById("messageError")
     const {data} = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
     const {logradouro, bairro, localidade, uf } = data
     
@@ -35,46 +34,45 @@ async function getData(cep) {
     document.getElementById('state').value = uf? uf: ''
     uf? $("#housenumber").prop("disabled", false) : null
 
-
-  }catch{
-    errordiv.innerHTML = `CEP não encontrado`
-  }
+    uf? "" : errordiv.innerHTML = 'CEP não encontrado'
 }
 document.getElementById('formData').addEventListener('submit', function(event) {
   event.preventDefault()
-
-  let newCustomers = {
-    id: customers.length + 1,
-    name: document.getElementById('iname').value + ' ' + document.getElementById('ilastname').value ,
-    adress: document.getElementById('adress').value + ', ' +document.getElementById('housenumber').value,
-    cep: document.getElementById("cepinput").value,
-    neighborhood:  document.getElementById("neighborhood").value,
-    city: document.getElementById("city").value,
-    stat: document.getElementById("state").value,
+  const fullname = document.getElementById('iname').value + ' ' + document.getElementById('ilastname').value
+  if(customers.filter((e) => e.name === fullname).length == 0){
+      let newCustomers = {
+        id: customers.length + 1,
+        name: fullname,
+        adress: document.getElementById('adress').value + ', ' +document.getElementById('housenumber').value,
+        cep: document.getElementById("cepinput").value,
+        neighborhood:  document.getElementById("neighborhood").value,
+        city: document.getElementById("city").value,
+        stat: document.getElementById("state").value,
+      }
+      customers.push(newCustomers)
+      loadTable(newCustomers)
+  }else{
+    alert('Usuario já existente')
   }
-  customers.push(newCustomers)
-  loadTable(customers)
 
 })
 
-function loadTable(data) {
+function loadTable(customer) {
   const body = document.getElementById('databody')
-  body.innerHTML = ''
-  data.map((customer) => {
-    body.innerHTML += `
-      <tr>
-        <th scope="row">${customer.id}</th>
-        <td>${customer.name}</td>
-        <td>${customer.adress}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>${customer.cep}</td>
-        <td>${customer.neighborhood}</td>
-        <td>${customer.city}</td>
-        <td>${customer.stat}</td>
-      </tr>
-    `
-  })
+  body.innerHTML += `
+        <tr>
+          <th scope="row">${customer.id}</th>
+          <td>${customer.name}</td>
+          <td>${customer.adress}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>${customer.cep}</td>
+          <td>${customer.neighborhood}</td>
+          <td>${customer.city}</td>
+          <td>${customer.stat}</td>
+        </tr>
+      `
 }
-loadTable(customers)
+customers.map((e) => loadTable(e))
+
