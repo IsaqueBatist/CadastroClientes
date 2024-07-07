@@ -7,20 +7,24 @@ function checkInput() {
     errordiv.innerHTML = `CEP invalido`
   }else {
     errordiv.innerHTML = ``
+    getData(cepinput.replace("-", ""))
   }
 }
 
 async function getData(cep) {
+  const errordiv = document.getElementById("messageError").value
   try{
     const {data} = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
-  }catch (error){
-    console.error(error)
+    const {logradouro, bairro, localidade, uf } = data
+    
+    document.getElementById('adress').value = logradouro? logradouro: ''
+    document.getElementById('neighborhood').value = bairro? bairro: ''
+    document.getElementById('city').value = localidade? localidade: ''
+    document.getElementById('state').value = uf? uf: ''
+    uf? $("#housenumber").prop("disabled", false) : null
+
+
+  }catch{
+    errordiv.innerHTML = `CEP não encontrado`
   }
 }
-
-document.getElementById('formData').addEventListener('submit', function(event) {
-  event.preventDefault()
-  const cep = document.getElementById("cepinput").value
-  const cepkey = cep.replace("-", "")
-  getData(cepkey)
-})
