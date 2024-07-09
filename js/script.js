@@ -1,4 +1,5 @@
 $("#cepinput").mask("00000-000")
+const form = document.getElementById('formData')
 let customers = [
   {
     id: 1,
@@ -10,20 +11,21 @@ let customers = [
     stat: "SP",
   }
 ]
-
 function checkInput() {
   const cepinput = document.getElementById("cepinput").value
   const errordiv = document.getElementById('messageError')
-  console.log(cepinput.length)
   if(cepinput.length < 9){
     errordiv.innerHTML = `CEP invalido`
+    $("#savebutton").prop("disabled", true)
+    setInputs(false)
   }else {
     errordiv.innerHTML = ``
+    $("#savebutton").prop("disabled", false)
     getData(cepinput.replace("-", ""))
   }
 }
 
-function setInputs(data, validation){
+function setInputs(data=[], validation){
   const errordiv = document.getElementById("messageError")
   const {logradouro, bairro, localidade, uf } = data
   if(validation){
@@ -32,24 +34,26 @@ function setInputs(data, validation){
     document.getElementById('city').value = localidade
     document.getElementById('state').value = uf
     $("#housenumber").prop("disabled", false)
+    $("#savebutton").prop("disabled", false)
   }else {
+    console.log('invalido')
     document.getElementById('adress').value = ""
     document.getElementById('neighborhood').value = ""
     document.getElementById('city').value = ""
     document.getElementById('state').value = ""
     $("#housenumber").prop("disabled", true)
-
+    $("#savebutton").prop("disabled", true)
     errordiv.innerHTML = 'CEP não encontrado'
   }
 }
 
 async function getData(cep) {
     const {data} = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
-    data.cep? setInputs(data, true) : setInputs(data, false)
+    data.cep? setInputs(data, true)  : setInputs(data, false)
 }
-document.getElementById('formData').addEventListener('submit', function(event) {
+form.addEventListener('submit', function(event) {
   event.preventDefault()
-  const fullname = document.getElementById('iname').value + ' ' + document.getElementById('ilastname').value
+  const fullname = `${document.getElementById('iname').value} ${document.getElementById('ilastname').value}`
   if(customers.filter((e) => e.name === fullname).length == 0){
       let newCustomers = {
         id: customers.length + 1,
@@ -62,6 +66,7 @@ document.getElementById('formData').addEventListener('submit', function(event) {
       }
       customers.push(newCustomers)
       loadTable(newCustomers)
+      form.reset()
   }else{
     alert('Usuario já existente')
   }
