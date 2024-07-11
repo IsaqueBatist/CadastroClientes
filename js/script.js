@@ -1,5 +1,8 @@
 $("#cepinput").mask("00000-000")
+const errordiv = document.getElementById('messageError')
 const form = document.getElementById('formData')
+
+//Aray com os clientes
 let customers = [
   {
     id: 1,
@@ -11,32 +14,32 @@ let customers = [
     stat: "SP",
   }
 ]
+
+//Faz do tamanho do CEP e se ele existe
 function checkInput() {
   const cepinput = document.getElementById("cepinput").value
-  const errordiv = document.getElementById('messageError')
-  if(cepinput.length < 9){
+  if (cepinput.length < 9) {
     errordiv.innerHTML = `CEP invalido`
     $("#savebutton").prop("disabled", true)
     setInputs(false)
-  }else {
+  } else {
     errordiv.innerHTML = ``
     $("#savebutton").prop("disabled", false)
     getData(cepinput.replace("-", ""))
   }
 }
 
-function setInputs(data=[], validation){
-  const errordiv = document.getElementById("messageError")
-  const {logradouro, bairro, localidade, uf } = data
-  if(validation){
+//Faz o preenchimentos dos inputs desabilitados
+function setInputs(data = [], validation) {
+  const { logradouro, bairro, localidade, uf } = data
+  if (validation) {
     document.getElementById('adress').value = logradouro
     document.getElementById('neighborhood').value = bairro
     document.getElementById('city').value = localidade
     document.getElementById('state').value = uf
     $("#housenumber").prop("disabled", false)
     $("#savebutton").prop("disabled", false)
-  }else {
-    console.log('invalido')
+  } else {
     document.getElementById('adress').value = ""
     document.getElementById('neighborhood').value = ""
     document.getElementById('city').value = ""
@@ -47,32 +50,36 @@ function setInputs(data=[], validation){
   }
 }
 
+//Faz o get na API
 async function getData(cep) {
-    const {data} = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
-    data.cep? setInputs(data, true)  : setInputs(data, false)
+  const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+  data.cep ? setInputs(data, true) : setInputs(data, false)
 }
-form.addEventListener('submit', function(event) {
+
+//Cria um novo cliente e o adiciona no array
+form.addEventListener('submit', function (event) {
   event.preventDefault()
   const fullname = `${document.getElementById('iname').value} ${document.getElementById('ilastname').value}`
-  if(customers.filter((e) => e.name === fullname).length == 0){
-      let newCustomers = {
-        id: customers.length + 1,
-        name: fullname,
-        adress: document.getElementById('adress').value + ', ' +document.getElementById('housenumber').value,
-        cep: document.getElementById("cepinput").value,
-        neighborhood:  document.getElementById("neighborhood").value,
-        city: document.getElementById("city").value,
-        stat: document.getElementById("state").value,
-      }
-      customers.push(newCustomers)
-      loadTable(newCustomers)
-      form.reset()
-  }else{
+  if (customers.filter((e) => e.name === fullname).length == 0) {
+    let newCustomers = {
+      id: customers.length + 1,
+      name: fullname,
+      adress: document.getElementById('adress').value + ', ' + document.getElementById('housenumber').value,
+      cep: document.getElementById("cepinput").value,
+      neighborhood: document.getElementById("neighborhood").value,
+      city: document.getElementById("city").value,
+      stat: document.getElementById("state").value,
+    }
+    customers.push(newCustomers)
+    loadTable(newCustomers)
+    form.reset()
+  } else {
     alert('Usuario já existente')
   }
 
 })
 
+//preenche a tabela de acordo com o Array
 function loadTable(customer) {
   const body = document.getElementById('databody')
   body.innerHTML += `
